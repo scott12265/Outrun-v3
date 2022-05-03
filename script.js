@@ -83,7 +83,7 @@ function setup() {
   
 
   colorP = random(colorList);
-  checkbox = createCheckbox("Dev data", false);
+  // checkbox = createCheckbox("Dev data", false);
   cam.tilt(20);
   accel = 50 * 0.03;
   gameStatus = 1;
@@ -91,27 +91,6 @@ function setup() {
 }
 
 function draw() {
-  if (gameStatus === 4) {
-    scorePage();
-  }
-
-  // end screen code
-  if (gameStatus === 3) {
-    push();
-    background("black");
-    fill("Black");
-    rotateX(270);
-    textSize(100);
-    textFont(font);
-    fill("#00ff11");
-    text("Score:" + score, 0, 100);
-    if (mouseX > 877 && mouseX < 1144 && mouseY > 818 && mouseY < 867) {
-      fill("red");
-    }
-    text("Retry", 0, 500);
-    pop();
-  }
-
   // start screen code
   if (gameStatus === 1) {
     // I'M TRYING TO MAKE THE BACKROUND AN IMAGE DONT WORRY ABT THIS CODE-LAIRD
@@ -122,7 +101,7 @@ function draw() {
     textAlign(CENTER);
     text("OUTRUN", 10, 150);
     textSize(50);
-    text("Use WASD to move", 10, 300);
+    text("Use WASD to move and space to jump", 10, 300);
     textSize(100);
     if (mouseX <= 1153 && mouseX >= 877 && mouseY >= 593 && mouseY <= 652) {
       fill("red");
@@ -138,7 +117,7 @@ function draw() {
     particle[1] = new Particle(x,y,z)
     }
     }
-    camera(x, 1000, z + 200, x, 0, z);
+    camera(x, 1000, 250, x, 0, 0);
     background(20);
     vel += accel;
     z -= vel;
@@ -176,39 +155,29 @@ function draw() {
       down = false;
     }
     // charecter draw code
-    push();
+    push()
     rotateX(270);
     text(score, 0, -300);
-    pop();
-    push();
+    pop()
+
+    push()
     translate(x, y, z);
     fill("black");
     stroke("#00ff11");
-    push();
     rotateX(score2);
     if(state === 0){
       sphere(40);
     }
-    
-
-    pop();
-    fill("white");
-    textSize(30);
-    push();
-    rotateX(270);
-    pop();
-    pop();
+    pop()
 
     push();
     fill("black");
     stroke("#00ff11");
     strokeWeight(5);
-    rect(0, 0, 500, 1000000);
-
+    rect(0, 0, 500, 1000000);  
     for (let i = -187.5; i <= 187.5; i += 62.5) {
       line(i, 900, i, -10000000);
     }
-
     pop();
 
     // movement for player
@@ -263,7 +232,20 @@ function draw() {
     }
  }
     
-  
+    // end screen code
+  if(gameStatus === 3){
+    x += rotationY
+    background('green')
+    fill('Black')
+    rotateX(270)
+    textSize(100)
+    textFont(font)
+    text('Score:' + score, 10, 100)
+    if(mouseX > 877 && mouseX < 1144 && mouseY > 818 && mouseY < 867){
+    fill('red')
+    }
+    text('Retry', 10, 500 )
+  }
 }
 
 //button interaction code
@@ -345,7 +327,6 @@ class Enemy {
       up = false;
       down = false;
       state = 0
-      z = 37
       setScore();
     }
   }
@@ -427,14 +408,13 @@ class Enemy1 {
       Espeed+=1
     }
     if (dist(this.x, this.y, x, y) < threshold) {
-      set3();
+      setTimeout(set3, 500)
       left = false;
       right = false;
       up = false;
       down = false;
       Espeed = 0;
       state = 0
-      z = 37
       setScore();
       
     }
