@@ -52,8 +52,7 @@ let highscore = 0;
 
 function preload() {
   font = loadFont("Pixel-Regular.ttf");
-
-  // song = loadSound('music.mp3')
+  bg = loadImage('outrun.jpg')
 }
 
 function setup() {
@@ -68,11 +67,11 @@ function setup() {
     enemy[i] = new Enemy();
   }
 
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 50; i++) {
     building[i] = new Building();
   }
 
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 50; i++) {
     buildingL[i] = new BuildingL();
   }
 
@@ -94,14 +93,15 @@ function draw() {
   // start screen code
   if (gameStatus === 1) {
     // I'M TRYING TO MAKE THE BACKROUND AN IMAGE DONT WORRY ABT THIS CODE-LAIRD
-    background("#5d4ecf");
+    background("#ED7173");
     // image(outrun,10,200,outrun.width,outrun.height)
     fill("black");
+
     textSize(200);
     textAlign(CENTER);
     text("OUTRUN", 10, 150);
     textSize(50);
-    text("Use WASD to move and space to jump", 10, 300);
+    text("Use WASD to move and space to Cump", 10, 300);
     textSize(100);
     if (mouseX <= 1153 && mouseX >= 877 && mouseY >= 593 && mouseY <= 652) {
       fill("red");
@@ -118,7 +118,7 @@ function draw() {
     }
     }
     camera(x, 1000, 250, x, 0, 0);
-    background(20);
+    background(random(255), random(255), random(255));
     vel += accel;
     z -= vel;
     if (z < 0 + 37 && x < 250 && x > -250) {
@@ -156,14 +156,15 @@ function draw() {
     }
     // charecter draw code
     push()
+    fill(random(255), random(255), random(255))
     rotateX(270);
     text(score, 0, -300);
     pop()
 
     push()
     translate(x, y, z);
-    fill("black");
-    stroke("#00ff11");
+    fill(random(255), random(255), random(255));
+    stroke(random(255), random(255), random(255));
     rotateX(score2);
     if(state === 0){
       sphere(40);
@@ -171,8 +172,8 @@ function draw() {
     pop()
 
     push();
-    fill("black");
-    stroke("#00ff11");
+    fill(random(255), random(255), random(255));
+    stroke(random(255), random(255), random(255));
     strokeWeight(5);
     rect(0, 0, 500, 1000000);  
     for (let i = -187.5; i <= 187.5; i += 62.5) {
@@ -226,25 +227,21 @@ function draw() {
 
  if(state === 1) {
    for(let i = 0; i < particle.length; i++) {
-      
       particle[1].show()
-      
     }
  }
     
     // end screen code
   if(gameStatus === 3){
-    x += rotationY
+    textAlign(CENTER);
+    createCanvas(2000, 1000)
     background('green')
-    fill('Black')
-    rotateX(270)
-    textSize(100)
-    textFont(font)
-    text('Score:' + score, 10, 100)
-    if(mouseX > 877 && mouseX < 1144 && mouseY > 818 && mouseY < 867){
-    fill('red')
+    fill('black')
+    text('Score: ' + score, 15, -30)
+    if (mouseX <= 1192 && mouseX >= 849 && mouseY >= 829 && mouseY <= 899){
+       fill('red')
     }
-    text('Retry', 10, 500 )
+    text('Retry', 15, 400 )
   }
 }
 
@@ -262,14 +259,9 @@ function mousePressed() {
     gameStatus = 2;
   }
 
-  if (
-    mouseX > 877 &&
-    mouseX < 1144 &&
-    mouseY > 818 &&
-    mouseY < 867 &&
-    gameStatus === 3
-  ) {
-    for (let i = 0; i < enemy.length; i++) {
+
+      if (mouseX <= 1192 && mouseX >= 849 && mouseY >= 829 && mouseY <= 899){
+         for (let i = 0; i < enemy.length; i++) {
       enemy[i].x = random(enemyX);
       enemy[i].y = -1000;
     }
@@ -287,190 +279,8 @@ function mousePressed() {
     Jz = 10;
     score = 1;
     Espeed = 10;
-
     gameStatus = 2;
-  }
-}
-
-class Enemy {
-  constructor() {
-    this.x = 0;
-    this.y = -1000;
-  }
-
-  move() {
-    push();
-    this.y += Espeed;
-    translate(this.x, this.y, 25);
-    stroke("red");
-    strokeWeight(5);
-    fill(50, 50, 50);
-    box(50);
-    pop();
-  }
-
-  sensing() {
-    if (this.y >= 900) {
-      this.y = random(-2000, -12000);
-      this.x = random(enemyX);
-      score += 1;
-      Espeed+=1
     }
-
-    if (dist(this.x, this.y, 25, x, y, z) < threshold) {
-      console.log("you lose");
-      setTimeout(set3, 500)
-      Espeed = 0;
-      state = 0;
-      left = false;
-      right = false;
-      up = false;
-      down = false;
-      state = 0
-      setScore();
-    }
-  }
 }
 
-class Building {
-  constructor() {
-    this.x = random(buildingX);
-    this.y = random(800, -12000);
-    this.z = random(-9000, -8000);
-    this.a = random(10, 40);
-  }
 
-  show() {
-    push();
-    this.y += Espeed / 1.8;
-    translate(this.x, this.y, this.z);
-    rotateX(-30);
-    // rotateY(this.a)
-    fill(50, 50, 50);
-    stroke("#00ff11");
-    strokeWeight(8);
-    box(500, 500, 20000);
-    if (this.y >= 900) {
-      this.y = random(-10000, -50000);
-      this.x = random(buildingX);
-      this.z = random(-9000, -8000);
-    }
-    pop();
-  }
-}
-
-class BuildingL {
-  constructor() {
-    this.x = random(buildingX);
-    this.y = random(800, -12000);
-    this.z = random(-9000, -8000);
-    this.a = random(-10, -40);
-  }
-
-  show() {
-    push();
-    this.y += Espeed / 1.8;
-    translate(this.x, this.y, this.z);
-    rotateX(-30);
-    // rotateY(this.a)
-    fill(50, 50, 50);
-    stroke("#00ff11");
-    strokeWeight(8);
-    box(500, 500, 20000);
-    if (this.y >= 900) {
-      this.y = random(-10000, -50000);
-      this.x = random(buildingX);
-      this.z = random(-9000, -8000);
-    }
-    pop();
-  }
-}
-
-class Enemy1 {
-  constructor() {
-    this.x = random(enemyX);
-    this.y = random(-700, -10000);
-  }
-  show() {
-    push();
-    translate(this.x, this.y, 200);
-    fill(50, 50, 50);
-    stroke("#cc00ff");
-    strokeWeight(5);
-    box(50, 50, 400);
-    this.y += Espeed;
-    pop();
-
-    if (this.y >= 900) {
-      this.x = random(enemyX);
-      this.y = random(-2000, -12000);
-      score+=1
-      Espeed+=1
-    }
-    if (dist(this.x, this.y, x, y) < threshold) {
-      setTimeout(set3, 500)
-      left = false;
-      right = false;
-      up = false;
-      down = false;
-      Espeed = 0;
-      state = 0
-      setScore();
-      
-    }
-  }
-}
-
-class Particle{
-  constructor(x,y,z) {
-    this.x = x
-    this.y = y
-    this.z = z
-    this.xv = random(-1,1)
-    this.yv = random(-10,-1)
-    this.zv = random(5,10)
-  }
-
-  show() {
-
-
-    push()
-    noStroke()
-    stroke('red')
-    fill('red')
-    this.x += this.xv
-    this.y += this.yv
-    this.z += this.zv
-    this.xv += 0.01
-    this.yv += 0.01
-    this.zv += 0.01
-    translate(this.x, this.y, this.z)
-    sphere(2)
-    pop()
-  }
-}
-
-function set3() {
-  gameStatus = 3;
-  x = 0;
-  y = 0;
-  z = 37
-  vel = 0;
-}
-
-function setScore() {
-  if (score > highscore) {
-    highscore = score;
-    storeItem("highscore", highscore);
-  }
-}
-
-function scorePage() {
-  push();
-  rotateX(270);
-  background(0);
-  fill(255);
-  textSize(50);
-  text("highscore: " + getItem("highscore"), 10, 10);
-  pop();
-}
